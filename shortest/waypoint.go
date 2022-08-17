@@ -6,13 +6,35 @@ type Waypoint struct {
 	TotalDistance uint16
 }
 
-func (wp Waypoint) GetUnvisited(possible []Connection) []Waypoint {
+// func exists(items []string, predicate func(string) bool) bool {
+// 	for _, item := range items {
+// 		if predicate(item) {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
+
+func exists[T any](items []T, predicate func(T) bool) bool {
+	for _, item := range items {
+		if predicate(item) {
+			return true
+		}
+	}
+	return false
+}
+
+func (wp Waypoint) Unvisited(possible []Connection) []Waypoint {
 	var unvisited []Waypoint
 	for _, cn := range possible {
-		if !Exists(wp.Route, func(v string) bool {
+		visited := exists(wp.Route, func(v string) bool {
 			return v == cn.Finish
-		}) {
-			newWp := Waypoint{Location: cn.Finish, Route: append(wp.Route, cn.Start), TotalDistance: wp.TotalDistance + cn.Distance}
+		})
+		if !visited {
+			newWp := Waypoint{
+				Location:      cn.Finish,
+				Route:         append(wp.Route, cn.Start),
+				TotalDistance: wp.TotalDistance + cn.Distance}
 			unvisited = append(unvisited, newWp)
 		}
 	}
