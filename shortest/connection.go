@@ -30,13 +30,12 @@ func LoadConnections(path string) ([]Connection, error) {
 		distance, err := strconv.Atoi(row[2])
 		if err != nil {
 			return nil, err
-		} else {
-			items := []Connection{
-				{Start: row[0], Finish: row[1], Distance: uint16(distance)},
-				{Start: row[1], Finish: row[0], Distance: uint16(distance)},
-			}
-			connections = append(connections, items...)
 		}
+		items := []Connection{
+			{Start: row[0], Finish: row[1], Distance: uint16(distance)},
+			{Start: row[1], Finish: row[0], Distance: uint16(distance)},
+		}
+		connections = append(connections, items...)
 	}
 	return connections, nil
 }
